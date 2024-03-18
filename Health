@@ -1,0 +1,55 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Health : MonoBehaviour
+{
+    private const float MinHealth = 0;
+
+    [SerializeField] private float _maxHealth = 100f;
+    [SerializeField] private Text healthText;
+    [SerializeField] private Slider _healthSlider;
+    [SerializeField] private Image _imageHealt;
+
+    private float _fillSpeed = 0.1f;
+    private float _currentHealth;
+    
+    private void Start()
+    {
+        _currentHealth = _maxHealth;
+    }
+
+    private void Update()
+    {
+        UpdateHealth();
+    }
+
+
+    public void TakeDamage(float attackDamage)
+    {
+        _currentHealth -= attackDamage;
+
+        if (_currentHealth <= MinHealth)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void Heal(float amount)
+    {
+        _currentHealth += amount;
+
+        if (_currentHealth > _maxHealth)
+        {
+            _currentHealth = _maxHealth;
+        }
+    }
+
+    private void UpdateHealth()
+    {
+        healthText.text = $"{_currentHealth}/{_maxHealth}";
+
+        _healthSlider.value = _currentHealth;
+
+        _imageHealt.fillAmount = Mathf.MoveTowards(_imageHealt.fillAmount, _currentHealth / _maxHealth, Time.deltaTime * _fillSpeed);
+    }
+}
