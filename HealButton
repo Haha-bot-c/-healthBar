@@ -1,0 +1,11 @@
+using UnityEngine;
+
+public class HealButton : MonoBehaviour
+{
+    [SerializeField] private Health _health;
+
+    public void OnClick()
+    {
+        _health.Heal(10);
+    }
+}
