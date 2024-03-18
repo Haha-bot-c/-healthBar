@@ -1,55 +1,33 @@
 using UnityEngine;
-using UnityEngine.UI;
+using System;
 
 public class Health : MonoBehaviour
 {
+    public event Action<float, float> OnHealthChanged;
+
     private const float MinHealth = 0;
 
     [SerializeField] private float _maxHealth = 100f;
-    [SerializeField] private Text healthText;
-    [SerializeField] private Slider _healthSlider;
-    [SerializeField] private Image _imageHealt;
 
-    private float _fillSpeed = 0.1f;
+
     private float _currentHealth;
-    
+
     private void Start()
     {
         _currentHealth = _maxHealth;
     }
 
-    private void Update()
-    {
-        UpdateHealth();
-    }
-
-
     public void TakeDamage(float attackDamage)
     {
         _currentHealth -= attackDamage;
-
-        if (_currentHealth <= MinHealth)
-        {
-            Destroy(gameObject);
-        }
+        _currentHealth = Mathf.Clamp(_currentHealth, MinHealth, _maxHealth);
+        OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
     }
 
     public void Heal(float amount)
     {
         _currentHealth += amount;
-
-        if (_currentHealth > _maxHealth)
-        {
-            _currentHealth = _maxHealth;
-        }
-    }
-
-    private void UpdateHealth()
-    {
-        healthText.text = $"{_currentHealth}/{_maxHealth}";
-
-        _healthSlider.value = _currentHealth;
-
-        _imageHealt.fillAmount = Mathf.MoveTowards(_imageHealt.fillAmount, _currentHealth / _maxHealth, Time.deltaTime * _fillSpeed);
+        _currentHealth = Mathf.Clamp(_currentHealth, MinHealth, _maxHealth);
+        OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
     }
 }
