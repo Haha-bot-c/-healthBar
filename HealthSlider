@@ -1,0 +1,12 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class HealthSlider : HealthDisplay
+{
+    [SerializeField] private Slider _healthSlider;
+
+    protected override void HandleHealthChanged(float currentHealth, float maxHealth)
+    {
+        _healthSlider.value = currentHealth;
+    }
+}
