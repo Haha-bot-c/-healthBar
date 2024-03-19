@@ -1,0 +1,35 @@
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
+
+public class HealthImage : HealthDisplay
+{
+    private const float FillSpeed = 0.1f;
+
+    [SerializeField] private Image _imageHealt;
+
+    private Coroutine _smoothFillCoroutine;
+    private float _targetFillAmount;
+
+    protected override void HandleHealthChanged(float currentHealth, float maxHealth)
+    {
+        _targetFillAmount = currentHealth / maxHealth;
+
+        if (_smoothFillCoroutine != null)
+        {
+            StopCoroutine(_smoothFillCoroutine);
+        }
+
+        _smoothFillCoroutine = StartCoroutine(SmoothFillTransition());
+    }
+
+    private IEnumerator SmoothFillTransition()
+    {
+        while (Mathf.Approximately(_imageHealt.fillAmount, _targetFillAmount) == false)
+        {
+            _imageHealt.fillAmount = Mathf.MoveTowards(_imageHealt.fillAmount, _targetFillAmount, Time.deltaTime * FillSpeed);
+            yield return null;
+        }
+    }
+}
