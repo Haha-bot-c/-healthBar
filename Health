@@ -3,31 +3,33 @@ using System;
 
 public class Health : MonoBehaviour
 {
-    public event Action<float, float> OnHealthChanged;
-
     private const float MinHealth = 0;
 
     [SerializeField] private float _maxHealth = 100f;
 
-
     private float _currentHealth;
+
+    public event Action<float, float> OnHealthChanged;
 
     private void Start()
     {
         _currentHealth = _maxHealth;
     }
-
     public void TakeDamage(float attackDamage)
     {
-        _currentHealth -= attackDamage;
-        _currentHealth = Mathf.Clamp(_currentHealth, MinHealth, _maxHealth);
-        OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+        ModifyHealth(-attackDamage);
+        
     }
 
     public void Heal(float amount)
     {
-        _currentHealth += amount;
-        _currentHealth = Mathf.Clamp(_currentHealth, MinHealth, _maxHealth);
+        ModifyHealth(amount);
+    }
+
+    private void ModifyHealth(float amount)
+    {
+        float newHealth = _currentHealth + amount;
+        _currentHealth = Mathf.Clamp(newHealth, MinHealth, _maxHealth);
         OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
     }
 }
