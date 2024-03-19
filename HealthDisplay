@@ -1,0 +1,19 @@
+using UnityEngine;
+
+public abstract class HealthDisplay : MonoBehaviour
+{
+    [SerializeField] protected Health healthComponent;
+
+    protected virtual void OnEnable()
+    {
+        healthComponent.OnHealthChanged += HandleHealthChanged;
+    }
+
+    protected virtual void OnDisable()
+    {
+        healthComponent.OnHealthChanged -= HandleHealthChanged;
+    }
+
+    protected virtual void HandleHealthChanged(float currentHealth, float maxHealth)
+    {} 
+}
