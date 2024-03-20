@@ -2,9 +2,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
+
 public class HealthImage : HealthDisplay
 {
-    private const float FillSpeed = 0.1f;
+    private const float FillDuration = 0.5f;
 
     [SerializeField] private Image _imageHealt;
 
@@ -19,15 +20,21 @@ public class HealthImage : HealthDisplay
             StopCoroutine(_smoothFillCoroutine);
         }
 
-        _smoothFillCoroutine = StartCoroutine(Lerp(targetFillAmount));
+        _smoothFillCoroutine = StartCoroutine(SmoothFill(targetFillAmount));
     }
 
-    private IEnumerator Lerp(float targetFillAmount)
+    private IEnumerator SmoothFill(float targetFillAmount)
     {
-        while (Mathf.Approximately(_imageHealt.fillAmount, targetFillAmount) == false)
+        float startFillAmount = _imageHealt.fillAmount;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < FillDuration)
         {
-            _imageHealt.fillAmount = Mathf.MoveTowards(_imageHealt.fillAmount, targetFillAmount, Time.deltaTime * FillSpeed);
+            elapsedTime += Time.deltaTime;
+            _imageHealt.fillAmount = Mathf.Lerp(startFillAmount, targetFillAmount, elapsedTime / FillDuration);
             yield return null;
         }
+
+        _imageHealt.fillAmount = targetFillAmount;
     }
 }
