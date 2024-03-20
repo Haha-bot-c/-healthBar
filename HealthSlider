@@ -5,8 +5,14 @@ public class HealthSlider : HealthDisplay
 {
     [SerializeField] private Slider _healthSlider;
 
+    private void Start()
+    {
+        _healthSlider.minValue = 0;
+        _healthSlider.maxValue = 1;
+    }
+
     protected override void HandleHealthChanged(float currentHealth, float maxHealth)
     {
-        _healthSlider.value = currentHealth;
+        _healthSlider.value = currentHealth / maxHealth;
     }
 }
