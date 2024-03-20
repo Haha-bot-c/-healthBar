@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class HealButton : MonoBehaviour
 {
+    private const float Treatment = 10f;
+
     [SerializeField] private Health _health;
 
     public void OnClick()
     {
-        _health.Heal(10);
+        _health.Heal(Treatment);
     }
 }
