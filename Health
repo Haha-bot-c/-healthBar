@@ -17,12 +17,18 @@ public class Health : MonoBehaviour
     }
     public void TakeDamage(float attackDamage)
     {
+        if (attackDamage <= 0)
+            return;
+
         _currentHealth -= attackDamage;
         ModifyHealth(_currentHealth);
     }
 
     public void Heal(float amount)
     {
+        if (amount <= 0)
+            return;
+        
         _currentHealth += amount;
         ModifyHealth(_currentHealth);
     }
