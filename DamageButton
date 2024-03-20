@@ -1,11 +1,14 @@
+
 using UnityEngine;
 
 public class DamageButton : MonoBehaviour
 {
-    [SerializeField] private Health _health;
+    private const float Damage = 10f;
 
+    [SerializeField] private Health _health;
+   
     public void OnClick()
     {
-        _health.TakeDamage(10);
+        _health.TakeDamage(Damage);
     }
 }
