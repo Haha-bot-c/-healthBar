@@ -9,7 +9,7 @@ public class Health : MonoBehaviour
 
     private float _currentHealth;
 
-    public event Action<float, float> OnHealthChanged;
+    public event Action<float, float> Changed;
 
     private void Start()
     {
@@ -17,19 +17,19 @@ public class Health : MonoBehaviour
     }
     public void TakeDamage(float attackDamage)
     {
-        ModifyHealth(-attackDamage);
-        
+        _currentHealth -= attackDamage;
+        ModifyHealth(_currentHealth);
     }
 
     public void Heal(float amount)
     {
-        ModifyHealth(amount);
+        _currentHealth += amount;
+        ModifyHealth(_currentHealth);
     }
 
-    private void ModifyHealth(float amount)
+    private void ModifyHealth(float currentHealth)
     {
-        float newHealth = _currentHealth + amount;
-        _currentHealth = Mathf.Clamp(newHealth, MinHealth, _maxHealth);
-        OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+        _currentHealth = Mathf.Clamp(currentHealth, MinHealth, _maxHealth);
+        Changed?.Invoke(_currentHealth, _maxHealth);
     }
 }
